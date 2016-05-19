@@ -1,0 +1,103 @@
+
+html::before {
+    content: ' ';
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
+    background-image: url("../images/Fairy-Tail-Logo-Desktop-Wallpaper-Backgrounds.jpg"); 
+    /*background-image: url("../images/fairy tail wall paper2.jpg");*/
+    background-size: cover;
+    will-change: transform;
+}
+body{
+	    font-family: 'Sigmar One', cursive,'Yanone Kaffeesatz', sans-serif;
+
+}
+
+h1 {
+    color: white;
+}
+
+h2 {
+    color: white;
+    text-align: right;
+}
+
+.spacer {
+    height: 50px;
+}
+
+.attack {
+    margin: 0px 0px 0px 100px;
+}
+
+.reset {
+    margin: 0px 0px 0px 100px;
+}
+
+.btn {
+    width: 150px;
+    height: 150px;
+    padding: 100px 0 0 0;
+    text-align: center;
+    margin: 10px 10px 10px 10px;
+    /*	position: absolute; 
+// 	display: block; */
+    border: solid 2px black;
+    float: right;
+    color: white;
+    font-size: 20px;
+}
+
+.userComm {
+    text-align: left;
+    position: absolute;
+    display: block;
+    left: 1%;
+    bottom: 90%;
+}
+
+.heroProgress {
+    position: absolute;
+    display: block;
+    left: 8%;
+    bottom: 48%;
+    /*	visibility: hidden;/*visible*/
+}
+
+.monsterImg {
+    float: right;
+    margin: 100px;
+}
+
+.selectText {
+    height: 20px;
+    min-width: 150px;
+    color: black;
+}
+
+#title {
+    color: black;
+    height: 20px;
+}
+
+.monsterList {
+    height: 200px;
+    min-width: 150px;
+}
+
+.goodguy {
+    float;
+    left;
+    display: block;
+}
+
+.badguy {
+    float;
+    left;
+    display: block;
+    margin-left: 10;
+}
