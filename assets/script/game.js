@@ -58,7 +58,7 @@ $(document).ready(function() {
         }, {
             name: "Gray",
             image: 'url(assets/images/Gray.jpg)',
-            fightImage: 'url(assets/images/Gray-fight.jpg',
+            fightImage: 'url(assets/images/Gray.jpg',
             baseHealthPoints: 700,
             baseAttackPower: 15,
             counterAttackPower: 29,
