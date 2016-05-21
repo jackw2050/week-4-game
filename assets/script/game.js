@@ -179,20 +179,23 @@ $(document).ready(function() {
             $(".selectText").text("");
             backgroundAudio.pause();
             backgroundFightAudio.play();
+            $("#title").text("Failry tail RPG")
             // $("html").css('background-image', 'url(../images/fairy tail wall paper2.jpg)');
         }
     });
 
 
 function reportCounterAttack(){
-			clearInterval(counterAttackTimer);
             heroHealthPoints -= challengerCounterAttackPower;
             if(heroHealthPoints < 0){heroHealthPoints = 0;}
             heroAttackPower += heroBaseAttackPower;
             $(".fightInfo").text(challengerName + " attacks " + heroName + " for " + challengerCounterAttackPower);
             heroPercent = Math.round(heroHealthPoints / heroBaseHealthPoints * 100);
             $("div.goodguyhp").text(heroName + "'s Health: " + heroPercent + "%");
+            window.clearInterval(counterAttackTimer);
+
             checkForWin();
+
 }
 
     $("button#attack").click(function() {
@@ -204,12 +207,6 @@ function reportCounterAttack(){
             $(".fightInfo").text(heroName + " attacks " + challengerName + " for " + heroAttackPower);
             $("div.badguyhp").text(challengerName + "'s  Health: " + badGuyPercent + "%");
             checkForWin();
-
- 			
-
-
-            // report dammage to bad guy
-            // timer? then report dammage to hero  or fade out - in with change
         }
 
 
@@ -229,13 +226,14 @@ function reportCounterAttack(){
         if (heroHealthPoints <= 0) {
             heroHealthPoints = 0;
             // print win status
-            $(".title").text("Sorry. You lose.")
+            $("#title").text("Sorry. You lose.")
                 // remove hero
             $(".fightInfo").text(heroName + " is defeated " );
 			$("div.goodguyhp").text("");
             $('#goodGuy').fadeOut(400); // fade in at hero position
             heroSelected = false;
             // end game
+
         } else if (challengerHealthPoints <= 0) { // Hero wins
             challengerHealthPoints = 0;
             // set win status
@@ -257,6 +255,7 @@ function reportCounterAttack(){
 			$('#badGuy').css('border-color', 'green');
 			heroPercent = Math.round(heroHealthPoints / heroBaseHealthPoints * 100);
 			$("div.goodguyhp").text(heroName + "'s Health: " + heroPercent + "%");
+            $("#title").text(heroName + " Wins!!")
 
 
 
