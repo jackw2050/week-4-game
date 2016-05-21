@@ -21,24 +21,26 @@ $(document).ready(function() {
     var challengerSelected = false;
     var heroName, heroID;
     var challengerName, challengerID;
-	var backgroundAudio = new Audio('assets/audio/Fairy Tail Main Theme.m4a');
-	var backgroundFightAudio = new Audio('assets/audio/Hagane No Hakunetsusen.m4a');
+    var backgroundAudio = new Audio('assets/audio/Fairy Tail Main Theme.m4a');
+    var backgroundFightAudio = new Audio('assets/audio/Hagane No Hakunetsusen.m4a');
+    var heroPercent;
+    var badGuyPercent;
 
 
 
     var myArray = [{
             name: "Natsu",
             image: 'url(assets/images/Natsu.jpg)',
-            fightImage:'url(assets/images/natsu-fight.jpg)',
-            baseHealthPoints: 800,
+            fightImage: 'url(assets/images/natsu-fight.jpg)',
+            baseHealthPoints: 3500,
             baseAttackPower: 37,
-            counterAttackPower: 26,
+            counterAttackPower: 480,
             healthPoints: 0,
             attackPower: 0
         }, {
             name: "Erza",
             image: 'url(assets/images/erza-scarlet.jpg)',
-            fightImage:'url(assets/images/erza-fight.jpg)',
+            fightImage: 'url(assets/images/erza-fight.jpg)',
             baseHealthPoints: 500,
             baseAttackPower: 31,
             counterAttackPower: 30,
@@ -47,17 +49,18 @@ $(document).ready(function() {
         }, {
             name: 'Pantherlily',
             image: 'url(assets/images/Pantherlily.jpg)',
-            fightImage:'url(assets/images/Pantherlily-fight.jpg)',
-            baseHealthPoints: 600,
-            baseAttackPower: 35,
+            fightImage: 'url(assets/images/Pantherlily-fight.jpg)',
+            baseHealthPoints: 500,
+            baseAttackPower: 45,
             counterAttackPower: 18,
             healthPoints: 0,
             attackPower: 0
         }, {
-            name: "gamera",
-            image: 'url(assets/images/gamera_Fotor.jpg)',
-            baseHealthPoints: 750,
-            baseAttackPower: 23,
+            name: "Gray",
+            image: 'url(assets/images/Gray.jpg)',
+            fightImage: 'url(assets/images/Gray-fight.jpg',
+            baseHealthPoints: 700,
+            baseAttackPower: 15,
             counterAttackPower: 29,
             healthPoints: 0,
             attackPower: 0
@@ -65,16 +68,16 @@ $(document).ready(function() {
 
     ];
 
-	backgroundAudio.addEventListener('ended', function() {
-		this.currentTime = 0;
-		this.play();
-	}, false);
-	backgroundAudio.play();
+    backgroundAudio.addEventListener('ended', function() {
+        this.currentTime = 0;
+        this.play();
+    }, false);
+    backgroundAudio.play();
 
-	backgroundFightAudio.addEventListener('ended', function() {
-		this.currentTime = 0;
-		this.play();
-	}, false);
+    backgroundFightAudio.addEventListener('ended', function() {
+        this.currentTime = 0;
+        this.play();
+    }, false);
 
 
 
@@ -107,23 +110,19 @@ $(document).ready(function() {
     $("button.monster").click(function() {
 
         if (heroSelected == false) {
-
-            var tempV = Number(this.id);
-            var newId = tempV + 10;
+            var tempV = this.id;
+            var newId = Number(tempV) + 10;
             heroBaseAttackPower = myArray[Number(this.id)].baseAttackPower;
             heroAttackPower = myArray[Number(this.id)].baseAttackPower;
             heroHealthPoints = myArray[Number(this.id)].baseHealthPoints
             heroBaseHealthPoints = myArray[Number(this.id)].baseHealthPoints
             $("#" + tempV).attr("id", newId);
 
-            //----------------------------------------------------------------------
-            //		Need to set ids on the fl
-
-            //uu = "#" + tempV;// move into selector
             uu = "#" + newId; // move into selector
             $(uu).fadeOut(400);
             timedText();
-
+            heroName = myArray[tempV].name;
+            console.log('Hero name ' + heroName);
 
             // Move hero to left side of screen
             $('.goodGuy').append(
@@ -133,8 +132,10 @@ $(document).ready(function() {
                 .hide()
                 .text(myArray[tempV].name)
                 .css('background-image', myArray[tempV].fightImage)
+                .css('border-color', 'green')
             );
-
+            heroPercent = Math.round(heroHealthPoints / heroBaseHealthPoints * 100);
+            $("div.goodguyhp").text(heroName + "'s Health: " + heroPercent + "%");
             $('#hero').fadeIn(400); // fade in at hero position
             heroSelected = true;
 
@@ -146,7 +147,6 @@ $(document).ready(function() {
             // Move challenger
             challengerName = this.value;
             challengerID = this.id;
-
             var tempV = Number(this.id);;
 
             challengerCounterAttackPower = myArray[Number(this.id)].baseAttackPower;
@@ -165,36 +165,76 @@ $(document).ready(function() {
                 .addClass("btn")
                 .hide()
                 .text(myArray[tempV].name)
-                .css('background-image', myArray[tempV].image)
+                //  .css('background-image', myArray[tempV].image)
+                .css('background-image', myArray[tempV].fightImage)
+                .css('border-color', 'green')
             );
+            challengerName = myArray[tempV].name;
+            console.log('Chanllenger name ' + challengerName);
+            badGuyPercent = Math.round(challengerHealthPoints / challengerBaseHealthPoints * 100);
+            $("div.badguyhp").text(challengerName + "'s  Health: " + badGuyPercent + "%");
 
             $('#badguy').fadeIn(400); // fade in at hero position
             challengerSelected = true;
             $(".selectText").text("");
-			backgroundAudio.pause();
-			backgroundFightAudio.play();
-			$("html").css('background-image', 'url(../images/fairy tail wall paper2.jpg)');
-
-
-
+            backgroundAudio.pause();
+            backgroundFightAudio.play();
+            // $("html").css('background-image', 'url(../images/fairy tail wall paper2.jpg)');
         }
     });
 
 
+function reportCounterAttack(){
+			clearInterval(counterAttackTimer);
+            heroHealthPoints -= challengerCounterAttackPower;
+            if(heroHealthPoints < 0){heroHealthPoints = 0;}
+            heroAttackPower += heroBaseAttackPower;
+            $(".fightInfo").text(challengerName + " attacks " + heroName + " for " + challengerCounterAttackPower);
+            heroPercent = Math.round(heroHealthPoints / heroBaseHealthPoints * 100);
+            $("div.goodguyhp").text(heroName + "'s Health: " + heroPercent + "%");
+            checkForWin();
+}
+
     $("button#attack").click(function() {
-        challengerHealthPoints -= heroAttackPower;
-        heroHealthPoints -= challengerCounterAttackPower;
-        heroAttackPower += heroBaseAttackPower;
-        checkForWin();
-        $("div.goodguyhp").text("Good guy HP: " + heroHealthPoints);
-        $("div.badguyhp").text("Bad guy HP: " + challengerHealthPoints);
+        if (heroSelected && challengerSelected) {
+            challengerHealthPoints -= heroAttackPower;
+            if(challengerHealthPoints < 0){challengerHealthPoints = 0;}
+
+            badGuyPercent = Math.round(challengerHealthPoints / challengerBaseHealthPoints * 100);
+            $(".fightInfo").text(heroName + " attacks " + challengerName + " for " + heroAttackPower);
+            $("div.badguyhp").text(challengerName + "'s  Health: " + badGuyPercent + "%");
+            checkForWin();
+
+ 			
+
+
+            // report dammage to bad guy
+            // timer? then report dammage to hero  or fade out - in with change
+        }
+
+
+
     });
+    $('button#reset').click(function() {
+        challengerSelected = false;
+        heroHealthPoints = heroBaseHealthPoints;
+        $(".selectText").text("Select your opponent");
+        backgroundFightAudio.pause();
+        backgroundAudio.play();
+    });
+
+
 
     function checkForWin() { // Challenger wins
         if (heroHealthPoints <= 0) {
             heroHealthPoints = 0;
             // print win status
-            // remove hero
+            $(".title").text("Sorry. You lose.")
+                // remove hero
+            $(".fightInfo").text(heroName + " is defeated " );
+			$("div.goodguyhp").text("");
+            $('#goodGuy').fadeOut(400); // fade in at hero position
+            heroSelected = false;
             // end game
         } else if (challengerHealthPoints <= 0) { // Hero wins
             challengerHealthPoints = 0;
@@ -202,20 +242,48 @@ $(document).ready(function() {
 
             // print win status
             // remove bad guy
-            //$('#badGuy').remove();
+            $(".fightInfo").text(challengerName + " is defeated " );
+            $("div.badguyhp").text("");
             $('#badguy').fadeOut(400); // fade in at hero position
             // reset hero HP
+            heroHealthPoints = heroBaseHealthPoints;
             challengerSelected = false;
             heroHealthPoints = heroBaseHealthPoints;
             $(".selectText").text("Select your opponent");
             backgroundFightAudio.pause();
             backgroundAudio.play();
-			$("html::before ").css('background-image', 'url(../images/Fairy-Tail-Logo-Desktop-Wallpaper-Backgrounds.jpg)');
+            $("html::before ").css('background-image', 'url(../images/Fairy-Tail-Logo-Desktop-Wallpaper-Backgrounds.jpg)');
+			$('#hero').css('border-color', 'green');
+			$('#badGuy').css('border-color', 'green');
+			heroPercent = Math.round(heroHealthPoints / heroBaseHealthPoints * 100);
+			$("div.goodguyhp").text(heroName + "'s Health: " + heroPercent + "%");
 
 
 
         } else {
+			var counterAttackTimer = setTimeout(reportCounterAttack, 800)
+            if (heroHealthPoints / heroBaseHealthPoints * 100 < 75) {
 
+                $('#hero').css('border-color', 'orange');
+            }
+            if (challengerHealthPoints / challengerBaseHealthPoints * 100 < 75) {
+                $('#badguy').css('border-color', 'orange');
+            }
+            if (heroHealthPoints / heroBaseHealthPoints * 100 < 50) {
+
+                $('#hero').css('border-color', 'yellow');
+            }
+            if (challengerHealthPoints / challengerBaseHealthPoints * 100 < 50) {
+                $('#badguy').css('border-color', 'yellow');
+            }
+            if (heroHealthPoints / heroBaseHealthPoints * 100 < 25) {
+
+                $('#hero').css('border-color', 'red');
+            }
+            if (challengerHealthPoints / challengerBaseHealthPoints * 100 < 25) {
+                $('#badguy').css('border-color', 'red');
+            }
+			
         }
     }
 
